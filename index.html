@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Searchable GTA VI guide: story missions, side quests, cheat codes and tips.">
+<title>Leonida Field Guide</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: sticky search bar on top, filter chips, single column of result cards; deliberately dark-only (night drive in Vice City) */
+:root{
+  --bg:#0d0f14;--panel:#151922;--panel2:#1b2030;--ink:#eef1f6;--muted:#97a0b3;--line:#262c3b;
+  --hot:#ff5a7a;--sun:#ffb347;--sea:#3fd0c9;--ok:#5ee08f;--warn:#ffcc66;
+  --display:Anton,Impact,"Arial Narrow",sans-serif;--body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 32px}
+.hero{padding-block:22px 6px}
+.hero h1{margin:0;font:400 44px/0.95 var(--display);letter-spacing:.01em;text-transform:uppercase;background:linear-gradient(90deg,var(--sun),var(--hot));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:8px 0 0;color:var(--muted);max-width:60ch}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:12px 10px;border-bottom:1px solid var(--line)}
+.search{position:relative}
+.search input{width:100%;font:inherit;font-size:17px;padding:13px 14px 13px 42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);outline:none}
+.search input:focus{border-color:var(--hot);box-shadow:0 0 0 3px color-mix(in srgb,var(--hot) 25%,transparent)}
+.search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.chip{font:600 13px var(--body);padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--muted);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:focus-visible,.card summary:focus-visible{outline:2px solid var(--sun);outline-offset:2px}
+.meta{color:var(--muted);font-size:13px;margin-top:8px;font-variant-numeric:tabular-nums}
+.list{display:grid;gap:10px;margin-top:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.card summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:start}
+.card summary::-webkit-details-marker{display:none}
+.card h3{margin:0;font:700 17px/1.25 var(--body);min-width:0}
+.card .alt{color:var(--muted);font-weight:500;font-size:13px}
+.tag{font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.t-mission{background:color-mix(in srgb,var(--hot) 18%,transparent);color:var(--hot)}
+.t-side{background:color-mix(in srgb,var(--sea) 18%,transparent);color:var(--sea)}
+.t-cheat{background:color-mix(in srgb,var(--sun) 18%,transparent);color:var(--sun)}
+.t-tip{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.sub{grid-column:1/-1;color:var(--muted);font-size:13px}
+.body{padding:0 16px 16px;border-top:1px solid var(--line)}
+.body h4{margin:14px 0 6px;font:600 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.body ol,.body ul{margin:0;padding-left:20px}
+.body li{margin:4px 0}
+.body li::marker{color:var(--hot)}
+.tips li::marker{color:var(--sun)}
+.code{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.code span{font:500 13px var(--mono);min-width:28px;height:28px;display:grid;place-items:center;border-radius:6px;background:var(--panel2);border:1px solid var(--line)}
+.warnbox{margin-top:14px;padding:12px 14px;border-radius:12px;background:color-mix(in srgb,var(--warn) 10%,var(--panel));border:1px solid color-mix(in srgb,var(--warn) 35%,transparent);font-size:14px}
+.warnbox b{color:var(--warn)}
+mark{background:color-mix(in srgb,var(--sun) 35%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.empty{color:var(--muted);text-align:center;padding:40px 0}
+.sources{margin-top:28px;color:var(--muted);font-size:13px}
+.sources a{color:var(--sea)}
+.sources ul{padding-left:18px}
+@media (max-width:560px){.hero h1{font-size:36px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <h1>Leonida Field Guide</h1>
+    <p>GTA VI missions, cheats, side quests and tips in one searchable place. Type a mission name, a character, or what you need ("money", "save", "helicopter").</p>
+  </div>
+  <div class="bar">
+    <div class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search missions, cheats, tips…" autocomplete="off" aria-label="Search the guide">
+    </div>
+    <div class="chips" id="chips"></div>
+    <div class="meta" id="meta"></div>
+  </div>
+  <div class="warnbox"><b>Heads up:</b> the game launched on November 19, 2026, so guides are still settling. Mission names and order differ a bit between sites, and every cheat code comes from fan lists, not Rockstar. Contains story spoilers.</div>
+  <div class="list" id="list"></div>
+  <div class="sources">
+    <b>Compiled from</b> (summarised in our own words, checked on Nov 20, 2026):
+    <ul>
+      <li><a href="https://outputlag.com/guides/gta-6-walkthrough-missions/" target="_blank" rel="noopener">Outputlag walkthrough</a> and its chapter 3–5 pages</li>
+      <li><a href="https://www.keengamer.com/articles/guides/gta-6-walkthrough-all-chapters-and-story-missions-in-order/" target="_blank" rel="noopener">KeenGamer mission list</a></li>
+      <li><a href="https://www.powerpyx.com/gta-6-full-walkthrough-all-missions/" target="_blank" rel="noopener">PowerPyx walkthrough</a>, tips, money, trophy and collectible guides</li>
+      <li>Cheats: <a href="https://beebom.com/gta-6-cheat-codes/" target="_blank" rel="noopener">Beebom</a>, <a href="https://www.vice.com/en/article/gta-6-cheat-codes-list/" target="_blank" rel="noopener">Vice</a>, <a href="https://www.keengamer.com/articles/guides/gta-6-all-cheat-codes-for-ps5-and-xbox-and-how-to-unlock-them/" target="_blank" rel="noopener">KeenGamer</a>, <a href="https://www.pcguide.com/news/gta-6-cheat-codes-list-for-playstation-5-xbox-series-xs-and-how-to-unlock-them/" target="_blank" rel="noopener">PC Guide</a></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+const CH = {0:"Prologue",1:"Ch 1 · Just Like Paradise",2:"Ch 2 · Paradise Lost",3:"Ch 3 · Vice City arrival",4:"Ch 4 · Vice City, Baby",5:"Ch 5 · Top of the World, Ma"};
+const items = [];
+function M(ch, name, alt, who, giver, steps, tips){ items.push({type:"mission", ch, name, alt, who, giver, steps, tips:tips||[]}); }
+function S(name, who, steps, tips){ items.push({type:"side", name, who, steps, tips:tips||[]}); }
+function T(name, points){ items.push({type:"tip", name, steps:points, tips:[]}); }
+
+// ---------- Story missions ----------
+M(0,"Prologue","","Lucia","",["Follow the guard to Lucia's counseling session in Hamlet Correctional.","Play through the flashback of the robbery that put her there."],["Nothing to fail here; just follow the markers."]);
+M(1,"Gone Fishing","","Jason","Cal & Donnie",["Drive Cal's boat while he scoops up packages Donnie drops from his plane.","Sneak into the Kingfishers' swamp camp and free Donnie.","Fly the seaplane back to Brian's Marina."]);
+M(1,"Gear Up","Pick Up Another Gun","Jason","",["Go to Ammu-Nation and buy a long gun."],["Three Kingfishers roll up in a truck as you walk out. Have the new gun ready."]);
+M(1,"Just a Scratch","Fix Your Car","Jason","Joey, Coastal Auto Care",["Drive the '70 Ganado to Joey's shop."],["The respray is free this one time. Restoring the stock engine costs $100.","You can do this before or after Lab Fees."]);
+M(1,"Lab Fees","Collect Brian's Rent","Jason","Brian",["Collect rent at the Moonstone Boutique.","The clerk can't pay, so take product from the hidden lab in the back room.","Drop it at Brian's lockup."]);
+M(1,"Unwanted Attention","Go See Cal","Jason","Cal",["Ride with Cal to the Hamlet impound lot.","Get in using the scissor lift or over the wall, and open the gate before touching the car.","Steal the red Imponte Phoenix and lose the police.","Respray it and deliver it to Brian, then change your outfit."],["Several cars look alike. Check the model name before you take one.","Keep damage low; a wrecked Phoenix can fail the mission."]);
+M(1,"Pipework","Collect Mandy's Rent","Jason","Mandy",["Grab the plunger from the bathroom.","Open the pipes under the sink and clear them with the wrench.","Collect the rent once the sink works."]);
+M(1,"Hey Arnold!","Meet Brian","Jason","Brian",["Meet Brian at the Crastenburg Hotel pool bar, then pick up Cal.","Track down Arnold, Brian's broker, and survive his men's ambush.","Chase him by car, then on foot to a dock, and corner him."],["Choice: sparing Arnold leans your profile toward Restrained; killing him leans violent. The story continues either way."]);
+M(1,"Island Dreams","Work for Kenton","Jason","Kenton Rees",["Take a bachelor party out diving.","Use the metal detector to find three treasures at the wreck.","Free Dobbs from the grate.","Drive off the shark with the spear gun."]);
+M(1,"Feng Shui","Meet Cal","Jason","Cal",["Push the furniture into the blue tape outlines before Lucia arrives.","Play games on the console with Cal."],["If the console game stalls, pause and choose Exit Game.","Afterwards Cal texts you about fishing; that leads to the Baited My Tackle trophy."]);
+M(1,"Coming Home","Lucia's Release","Jason","",["Pick up Lucia's bag of clothes from Andy.","Pick Lucia up at the prison."],["Forgetting the bag hurts your relationship with Lucia.","Optional errands around now: groceries, flowers, a necklace, a haircut (The Chop)."]);
+M(1,"Buck Me","Set Up Bank Account","Jason","",["Open a BuckMe account at the Fleeca bank."],["Pocket cash only covers buys up to $999; above that it comes from BuckMe.","Deposit cash at any ATM so you don't lose it in risky missions."]);
+M(1,"Clean Up After Donnie","Donnie's Drop","Jason","Donnie",["Ask the fisherman at the Grassrivers dock.","Take the boat to the shack downriver and get the cocaine back from the crew.","Boat it to Donnie's trailer on Key Lento."],["Can be done before or after Buck Me."]);
+M(1,"Down to Earth","Meet Brian","Jason & Lucia","Brian",["Pressure-wash the boat at the boatyard.","Fly the Dodo seaplane with Lucia, hook the package, and fight your way out when the sellers turn.","Land next to each drop boat to deliver, until the Coast Guard shows up.","At home, hide the drugs in the shed before Lucia's parole officer arrives."],["Next morning Lucia meditates on the balcony. Join her and accept; it may count for a trophy and can't be done after Chapter 1."]);
+M(1,"Clear Skies","Join Donnie on a Job","Jason","Brian",["Fly the Dodo directly above Pilot Pete's plane so air traffic control only sees one aircraft.","Rescue Donnie when his side deal with bikers goes wrong."]);
+M(1,"Day Release","Meet Mattia & Kat","Jason","Mattia",["Take a speedboat to Mattia's party yacht and find him in the middle room below deck.","Win the jet ski race.","Drive the supercar to a Vice City nightclub."]);
+M(1,"Swamped","Meet Brian","Jason","Brian",["Ride with Brian to the slaughterhouse meeting with the Kingfishers. It's a trap.","Get out with Brian and take the helicopter.","Hold off the Kingfishers and chase the truck to rescue Lori."]);
+M(1,"Don Gone","Head to Donnie's Trailer","Jason","Brian",["Pack Donnie's bag in his trailer.","Beat up the three men outside.","Drive his '85 Blista off Key Lento, then burn it with the gas can or sink it somewhere quiet."]);
+M(1,"Recalibration","Talk to Lucia","Jason","",["Buy beer at the shop across from Cal's.","Take Cal fishing and grill the catch.","Walk Lucia home."],["If Lucia won't follow you, reload the checkpoint."]);
+M(1,"Tourist Trap","Take Up Mattia's Offer","Jason","Mattia",["Collect the bag from the Visitor Center locker.","Survive the run-in with corrupt officers.","Escape by boat."],["Point of no return: several story missions follow back to back. Finish exploring and make a manual save first.","Cash on hand gets lost in what follows. Guides suggest moving at least $5,000 into BuckMe savings before starting."]);
+M(1,"Home Sweet Home","","Lucia","",["Go back to Jason's house for his stash.","Escape the masked men and the fire.","Slip past the police with Andy's help and reach Jason at the hospital."]);
+M(1,"Discharge Time","","Lucia","",["Get the wounded Jason out of the hospital before the men hunting him reach his room."],["Chapter 1 finale."]);
+M(2,"What's in the Bag?","","Lucia","",["Follow Lucia's first objectives at the motel in Port Gellhorn: look after Jason and talk to Linda, the manager."]);
+M(2,"Just Moved In","","Lucia","",["Settle in at the motel and do the shopping objectives."]);
+M(2,"Girls' Trip","Find Painkillers","Lucia","Vicki",["Ask Vicki, your motel neighbour, for painkillers.","Her pills turn out to be over-the-counter, so drive her to the Delights club for her pay.","Find her friend Dunk."]);
+M(2,"Moses","Take a Vehicle to Moses","Lucia","Vicki",["Meet Moses, a car booster.","Scan his cars with your phone for trackers and alarms."],["Unlocks car registration at Watkins Auto Parts: respray, then register. The first one is free.","Money: Moses buys untracked stolen cars for about $1,000 each."]);
+M(2,"Ambulance Chaser","Move the Ambulance","Lucia","",["Chase whoever drives off with the ambulance hidden in the barn.","Stop it and get rid of it so it can't be traced."]);
+M(2,"Slam Dunk","Find Painkillers","Lucia & Dunk","",["Corner Dr. Bill outside a store and pressure him for real painkillers.","Drive him to the contact he names."],["If it stalls after the cutscene at Dunk's trailer, phone Dunk yourself."]);
+M(2,"Daily Driver","Steal the Crawler for Moses","Lucia","Moses",["Steal the vehicle Moses asks for and deliver it to him."]);
+M(2,"Breakfast Run","Check on Jason","Jason & Lucia","",["Pull a string of robberies: one of you controls the crowd while the other empties the registers."],["Buy Lucia a coffee at the motel afterwards to unlock character switching."]);
+M(2,"Coffee Break","","Jason & Lucia","",["Talk things through as a couple and get ready for the next job."]);
+M(2,"Afternoon Delight","Rob Vicki's Boss","Jason & Lucia","",["Get the safe combination sent to your phone.","Once the show starts, slip into the manager's office through the kitchen and open the safe."]);
+M(2,"Checking Out","Move to Vice City","Jason & Lucia","",["A fight breaks out at the motel. Survive it.","Grab a new car and head for Vice City."],["Chapter 2 finale. Save first. Guides recommend having about $15,000 in savings, and you lose the motel as a home."]);
+M(3,"Welcome to Vice City","","Jason & Lucia","Dre'Quan",["Meet Dre'Quan at the Jack of Hearts and get the tour.","Boobie Ike gives you the Bayside apartment (second floor, side lot)."]);
+M(3,"Dealer's Choice","Go See Dre'Quan","Jason","Boobie Ike",["Collect product from Tyrone at Imperial Plaza in La Perle.","Choose to keep it pure or cut it.","Sell it at the Crosstown community center, walking the last stretch."],["Pure is what Boobie actually pays for.","Saying 'half price' keeps the buyers calm; 'take it or leave it' starts a fight."]);
+M(3,"Dubious Provenance","Visit the Antique Store","Jason & Lucia","Benedict Halifax",["Take the bronze statue to Evelyn's antiques shop in Capri.","Halifax keeps the statue to authenticate it and leaves his watch as collateral."],["Optional later: if you let Halifax go, you can chase him down on Velona Drive."]);
+M(3,"Mami Knows Best","Catch Up with Mia","Lucia","Mia",["Clear the front yard of the listing into the dumpster.","Pull the rubbish out of the pool."]);
+M(3,"Here, Kitty Kitty","Speak with Tyrone","Jason","Tyrone",["Charles isn't home; find the thrift-store receipt in La Perle.","Track him to the junkie camp in a nearby parking garage and chase him.","Take the baggie with the pink cat on it; it's your lead."],["Opens Tyrone's side jobs (including Spin On This)."]);
+M(3,"Boobie Time","Talk to Boobie","Jason","Boobie Ike",["Drive Boobie on his money runs (North Vice Ave, Rockridge).","Chase the kids who grab the cash bag; they flee on a Seashark.","Take Boobie to Yasmani's smoke shop."]);
+M(3,"Meet the Heders","Meet Brian & Lori","Jason & Lucia","Brian Heder",["Have dinner with Brian and Lori, who introduce you to Raul.","As Lucia, steal the Guardia brothers' car from the port during a Coast Guard sweep: use the uniform, the angle grinder and the back gate.","Chase down the tracker, lose the police, and drop the car at the lockup."]);
+M(3,"Car Service","Steal the Car for Raul","Lucia","Raul",["Steal a Benefactor Schafter V12 from a chop shop.","Fight off the crew.","Deliver it to Randy at Leonida Auto World."],["Randy's number starts his car wish list; those supercars pay $30,000+."]);
+M(3,"Top Billing","Watch the Real Dimez","Jason & Lucia","Dre'Quan",["Roxy walks out of the show; chase her to Kamal's house party.","She won't leave, so cut the power and she comes out."]);
+M(3,"First Impressions","Meeting with Raul","Jason & Lucia","Raul",["Act as Raul's decoy getaway car.","Reach the Redwood Suites garage and burn the car to clear prints.","Switch rides and drop Raul in the alley by Dynamix Gym."]);
+M(3,"Crosstown Traffic","Meet Raul","Lucia, then Jason","Raul",["As Lucia, follow Pineapples onto the metro and hold him at gunpoint.","As Jason, hijack the couriers' boat while gangs and the Coast Guard chase you."],["Pull the emergency brake at the end of the carriage to stop the train where the gang is.","Pays $3,000."]);
+M(3,"Credit Check","Meet Raul's Crew","Jason & Lucia","Raul",["Meet Andrea and Karim.","Rob three small banks in one run: sticky bombs open doors, Karim's device kills the dye packs.","Shake the police and hand the cash to Valentina."],["If an alarm goes off you have about 20 seconds before police arrive."]);
+M(3,"Clonin' Keys, Makin' GS","Steal the Zorrusso for Randy","Jason & Lucia","Randy",["Steal the high-end Zorrusso Randy wants and deliver it."]);
+M(3,"Ride or Die","Meet Dre'Quan","Jason","Dre'Quan",["Buy the sold-out sneakers from a reseller inside the store.","Get DWNPLY to sign them in the VIP lounge and snatch his key.","Set off the car alarm to find his car, then drive it to the speed shop while his crew shoots at you."]);
+M(3,"Sinfrontera National Bank","Scope Out the Bank","Jason & Lucia","Raul",["Scout the cartel bank with Raul: a biometric reader guards the vault floor, there are 105 cameras and armed guards."],["First Cartel Heist prep mission."]);
+M(3,"Security Expert","","Jason & Lucia","Raul & Andrea",["At night, slip into Nicole Park's guarded Waiting Sands house through the back door.","Knock her out if she runs and carry her to Raul's lockup."]);
+M(3,"Caught Slipping","","Jason & Lucia","",["Two men break into the Bayside apartment; chase each one down.","Move the hard drive and statue to Big House Storage, locker A726 on the 7th floor."]);
+M(3,"Company Property","Meet Brian","Jason & Lucia","Raul, via Brian",["Pick Brian up from a bar and drive his truck to the airstrip for Pilot Pete's explosives.","Fight out of the government raid.","Fly Pete's plane out, lose pursuit, and deliver to Felipe."]);
+M(3,"Safe Word","Steal the Practice Safe","Jason & Lucia","Nicole Park",["Drive the truck to Gil's house in Peacock Estates posing as pool maintenance.","Grab the safe, lose the police, and swap trucks with Felipe.","Crack the safe with Nicole."],["Drill hard at first, then ease off before the light turns red.","Keep the camera off the inner walls or the glass breaks and the safe hard-locks."]);
+M(3,"The Missing Link","Meet Andrea","Lucia, then Jason","Raul & Andrea",["As Lucia, spike Monty's drink at his party.","Carry him out and fight off his men; Jason joins the escape."],["Monty gives up the bank's account manager and lockbox numbers."]);
+M(3,"Cooties","Shoot the Music Video","Jason & Lucia","Real Dimez",["Use DWNPLY's stolen car in the video shoot.","Fight off his gunmen and escape when the car breaks down."]);
+M(3,"Hidden Charges","","Jason & Lucia","Raul & Karim",["Drive downtown with Felipe's explosives.","Plant a bag at the red call box at the base of each of the three cell towers without being seen."]);
+M(3,"Bricked Up","Return to the Apartment","Jason & Lucia","Boobie Ike",["Pick up Boobie's four bricks from Raymond on the top floor of the Venture Apartments.","A police raid hits: cut through the apartments to escape.","Deliver the bricks to Boobie at the club."]);
+M(3,"South Leonida Real Estate","Meet Mia","Lucia","Mia",["Continue Mia's property storyline with the M7 listings."]);
+M(3,"The Cartel Heist","Start the Heist","Jason & Lucia","Raul",["Set off the cell tower charges and walk into Sinfrontera National Bank as customers.","Karim takes over the cameras; control the lobby.","Open the basement gate for the truck.","As Jason, reach the emergency terminal in the glass box on the roof before lockdown.","Empty the vault and leave in Felipe's truck."],["Chapter 3 finale. The story pays about $120,000 at the end of the chapter."]);
+M(4,"Ocean Beach","","Jason & Lucia","Raul / Valentina",["Pack up Bayside and drive to the Y hotel; give the car to the valet.","Meet Valentina, who checks you into room 701 and sets up BuckMe Premium accounts."]);
+M(4,"Another Life","","Lucia, then Jason","",["Play Lucia's flashback.","As Jason at the pool: get a cocktail, talk to guests, walk with Lucia, and take Valentina's call."]);
+M(4,"Company Cars","Speak to the Concierge","Jason & Lucia","Valentina, via Santino",["Ask Santino the concierge about services.","Go to Status Auto Imports in Bayside and ask for Rob.","Each pick a car and race back to the hotel."]);
+M(4,"Lawyer Up","Meet Abe Gonzalez","Jason & Lucia","Valentina",["At Gonzalez's office, tell the receptionist you're friends of Valentina.","He wants work done first; collect the hard drive from your storage unit."]);
+M(4,"Heavy Lifting","Bring Raul the Hard Drive","Jason & Lucia","Raul",["Take the drive to Raul's houseboat at Vinewood Beach.","At the Ajax Gym, get close enough to clone Nate's phone (he's on a tanning bed).","Follow the crew to a hotel and watch which floor the elevator stops at."]);
+M(4,"Party Hard","Work Personal Security","Jason & Lucia","Valentina",["Pose as security for Andres de Leon and stop him wandering off (he detours to a juice bar).","Get him to the speeches at Mega Mundo's new building.","Find him hiding in the 24th-floor conference room."]);
+M(4,"Photo/Shoot","Shoot a Promo","Jason & Lucia","Dre'Quan",["Fly a borrowed helicopter so Lucia can photograph Real Dimez.","The promoter is a setup; chase the crew that grabs Dre'Quan."]);
+M(4,"Making Gainz","","Lucia","Raul",["Get the file on Kordell's crew.","Train at their gym to get inside through Nate (Jason has already been seen)."]);
+M(4,"Too Much Baggage","Scope Out the Airport","Jason","Raul, with Karim",["Start a shift as a trainee baggage handler at VCIA.","Hook up the tug carts.","Plant Karim's Wi-Fi cloner."]);
+M(4,"Watch It","Meet Dre'Quan","Jason","Dre'Quan",["Sort out a fake watch problem with Dre'Quan and pick up outfits.","Meet promoter Royce Jones, who wants Dante Fresh's receipts gone."]);
+M(4,"Amateur Hour","","Lucia","Cisco",["Pose as an aspiring actress to find out who stiffed Cisco on a film shoot, then confront the director."]);
+M(4,"Cash Injections","Hang Out With Nate","Lucia","Nate",["Spend time with Nate and collect contacts for the airport heist."]);
+M(4,"Dirty Work","Deal with Raina","Jason & Lucia","",["Set up a meeting at the Velvet Palm Motel to cast doubt on Raina."]);
+M(4,"Adventures in Babysitting","Work Security for Andres","Jason","Andres de Leon",["Bodyguard Andres at the nightclub."]);
+M(4,"Fresh Evidence","Meet Dre'Quan","Jason","Dre'Quan",["Scope out Dante Fresh's Starfish Island mansion.","Steal his private tapes."]);
+M(4,"Child's Play","Rescue Rafa from Kidnappers","Lucia, then Jason","Abe",["Stall the ransom handover at the cement factory south of the airport.","Rescue Rafa while Jason guards Andres."]);
+M(4,"Power Play","Help Kordell's Crew","Lucia, then Jason","Nate",["As Lucia, drive the armored truck job.","As Jason, search the hideout and photograph the airport plans."]);
+M(4,"Close Surveillance","Spy on the Bodybuilders","Jason","",["Use the spy drone to tail Cisco and Nate.","Listen in to find the airport inside man."],["Can be swapped in order with Delivery Method."]);
+M(4,"Delivery Method","Help Andrea","Jason","Andrea",["Pose as a food delivery driver.","Plug Andrea's device into a computer in the security office."]);
+M(4,"Team Building","Meet Kordell","Lucia","Kordell",["Drive Kordell to a warehouse and answer his questions about your contacts."]);
+M(4,"Fully Catered","Steal a Catering Truck","Jason","Raul",["Fill duffel bags with fake cash for the catering-truck swap.","Collect the passports."]);
+M(4,"Headliners","Help With the Launch Party","Jason","Dre'Quan",["Work the launch party and the Real Dimez show at VYB while Dre'Quan chases a headline slot."]);
+M(4,"VCIA Takedown","Start the Airport Heist","Jason & Lucia","Raul",["Run the airport heist with the crew and gear you prepared."],["Save before starting."]);
+M(4,"Sunset","Stop by the Front Desk","Jason & Lucia","",["A note at the hotel desk sends you to Raul's boats at Ocean Beach Marina."]);
+M(4,"Starting From Zero","","Jason & Lucia","",["Escape by boat.","Discover your accounts are frozen and go after the hard drive."],["Chapter 4 finale."]);
+M(5,"Bird in the Hand","","Jason & Lucia","Giorgio Gallo",["Meet Gallo's ex-Navy crew (Vinny, Kevin, Liz) in the gym.","Scout the Coast Guard base from the air.","Steal a heavy-lift helicopter from the military base: swim in, follow the GPS, open the grate, reach the hangar and open its doors."],["Hardest part is defending the helicopter from jets. Switch to Jason when told; normal guns barely hurt the jets."]);
+M(5,"Taking Liberties","","Jason & Lucia","Giorgio Gallo",["Walk to the spa on the gym level and meet Gallo."],["Nothing to fail; about 7 minutes of story."]);
+M(5,"Doggie Bag","Meet Vinny","Lucia, then Jason","Vinny",["Board the cruise ship during the Coast Guard search and ride the elevator to the top deck.","Knock out Rocco at the running track (Vinny gives you a spiked treat and non-lethal ammo).","Carry him to the landing zone at the back for helicopter pickup."]);
+M(5,"VC Baby","Talk to Mattia","Jason & Lucia","Mattia",["Kat goes into labour. Choose to help or refuse.","If you help: Lucia distracts Dardan while Jason lifts the key fob, then take a car from the garage and drive Mattia to hospital."],["Refusing ends it in minutes. No later effect has been confirmed either way."]);
+M(5,"Operation Savage Glory","","Jason & Lucia","Vinny",["Plant charges on a bridge pillar and raise the other bridge.","Swim in through the tunnel; Jason rigs a cargo ship to pull the Coast Guard away.","Inside the base, find the cocaine, open the shutter, and defend the cargo.","Escape with Lucia on the cargo net."],["Longest mission in the game, about 50 minutes. Unlocks the Snow Storm trophy."]);
+M(5,"Honest Abe","Negotiate a Deal with Abe","Jason & Lucia","",["Walk out of the penthouse and meet Abe in his office; he offers a full pardon."],["Your checking balance will be lost. Move money into BuckMe Family Savings before signing; those transfers can't be withdrawn."]);
+M(5,"Protective Custody","Meet with Abe","Jason & Lucia","Abe Gonzalez",["Sign the pardon papers at Abe's office and take the drive to the drop as Jason.","You get arrested. Break out of the precinct: barricade the door with lockers, stock up at the armory, survive the NOOSE assault and beat Mendez's task force."],["Save before this one; the second half runs 40+ minutes."]);
+M(5,"The End of the Road","","Jason & Lucia","",["At Cal's place in the Keys, take the body armor and frag grenades from the table.","Hit the waterfront tower for Cal's files.","About 25 minutes in, one choice decides the ending."],["Save before starting. Story Complete unlocks the cheats menu."]);
+
+// ---------- Side & optional ----------
+S("Get Shirley's Rum","Ch 1 · missable",["Finish Shirley's errand before leaving the Leonida Keys."]);
+S("Steal the Scooter","Ch 1 · missable",["Complete Shirley's scooter task before Chapter 1 ends."]);
+S("Find the Lost Drugs / Donnie's Lost Drugs","Ch 1",["Optional Donnie follow-up in the Keys; available between story missions."]);
+S("Check Out McKittrick Farm","Ch 2 · Kyle questline",["Meet Kyle to start his questline (Collect Chemicals next, ends with Buddy? in Ch 3)."]);
+S("Thrillbillies","Ch 2 · Billy questline",["Visit the Mud Club and meet Billy. Followed by Twist Wrist, Smash, Grab and later Mall Rats."]);
+S("Veteran Hunted","Ch 2 · Jason · Bret questline",["Meet Bret for hunting objectives; leads to the hunting-deck trophy."]);
+S("Join a Street Race","Ch 3 · Yago questline",["Enter the street race to start Yago's chain."]);
+S("Bumper to Bumper","Ch 3 · Jason · Yago",["Upgrade Yago's car with nitrous.","Race him; second place still completes the mission.","Lose the police afterwards."],["Use nitrous only on straights."]);
+S("Race Against Yago","Ch 3 · missable",["Do it as soon as the hourglass marker appears; it expires."]);
+S("Brother to Brother","Ch 3 · Yago finale",["Back up Yago on his last job after his earlier missions."]);
+S("Yasmani's Jewelry Jobs","Ch 3",["Hit Richardson Jewelry, Donovan Banks & Co and Casa de Empeno, then sell the jewelry to Yasmani."],["Jewelry robberies pay roughly $10,000–25,000."]);
+S("This Is a Free Call From...","Ch 4 · Lucia · missable",["Time-sensitive pickup of Shayna. Do it as soon as it appears."]);
+S("That's Where The Money Is...","Ch 4",["Wait at the cafe to start the bank-robbery intro."],["Unlocks bank vault robberies worth up to about $205,000 (they bring a 4-star wanted level)."]);
+S("Strangers & Freaks overview","All chapters",["About 42 side quests across Shirley, Kenton, Cal, Kirk, Kyle, Bret, Moses, Billy, Yago, Andy, Yasmani, Randy, Tyrone, Dunk, Eddie Acosta and Pilot Pete.","The Strangers & Freaks trophy needs 8 questlines; Kirk, Kyle, Yago and Pilot Pete count toward it."]);
+
+// ---------- Tips ----------
+T("Saving & missables",["There is no mission replay. Make a manual save at the start and end of every chapter.","Hourglass markers mean time-sensitive optional missions. Do them before advancing the story.","Pink storybook icon = available main missions. Solid pink markers are main, black-and-pink are optional.","If no main mission shows up, do an activity or wait for a phone call or text; some missions unlock after a delay.","The only possibly missable trophy item is Lucia's balcony meditation after Down to Earth in Chapter 1."]);
+T("Money guide by chapter",["Ch 1: don't grind money; cash is lost when the chapter ends. Focus on the story.","Ch 2: sell untracked stolen cars to Moses for about $1,000+ each.","Ch 3: jewelry robberies pay $10k–25k; cars with standard trackers sell for about $4,000 at Pay 'n' Spray; Randy's wish-list supercars pay $30k+.","Ch 4: after That's Where The Money Is..., bank vaults pay up to about $205,000.","After the story: repeat vault robberies for roughly $100k–200k each.","Keep money in BuckMe, not your pocket, before dangerous missions."]);
+T("Getting around & police",["Taxis fast-travel anywhere for $100. The RydeMe app unlocks after Chapter 2.","Lose the police with fast bikes, train tracks, or by shooting down helicopters. A Pay 'n' Spray clears your heat.","Respray and register stolen cars at Watkins Auto Parts (from Chapter 2) so they stop being tracked."]);
+T("Character & stats",["Workouts, food and drink buff your stats. Sleeping without eating or working out drags them down.","Body armor, ammo and explosives come from Ammu-Nation.","Scan cars and study animals with the phone to fill the database; 100% needs 100 of 255 animals and 200 of 277 base vehicles."]);
+T("Trophies & 100%",["55 trophies, about 200 hours for the platinum, difficulty around 4/10.","Story missions have no gold medals or hidden objectives. Medals only exist in shooting ranges and races.","Cheats disable trophies and saving for that session.","The hardest trophy is A Long Road (100% completion)."]);
+T("Collectibles at a glance",["Vehicles: 557 (277 base, 280 standout). Animals: 255. Weapons: 196.","Stunts: 397 (130 jumps, 202 under-bridge flights, 40 knife flights, 25 base jumps). Challenges: 80.","18 card sets (480 cards), 18 meditation spots, 125 cocaine flamingos.","40 races, 14 shooting ranges (42 golds), 42 drone time trials, 22 bank jobs, 72 convenience stores."]);
+T("How to use cheats",["Cheats unlock only after you finish the main story; then open Progress → Cheats.","Each cheat also has its own unlock challenge (listed on each cheat below).","To enter: press Up on the D-pad to open the phone, hold L1 + R1 (PS5) or LB + RB (Xbox), then type the D-pad sequence. Codes are the same on both consoles.","Cheats only work in single-player story mode and block trophies and saving that session. Save first, then reload the clean save afterwards.","One site says entering the same code again turns the cheat off."]);
+
+// ---------- Cheats ----------
+const CHEATS = [
+["$250,000 money","URDLULDR","Finish the story"],
+["Drunk","ULRUULRULR","Spend $2,500 on alcohol (code on one site only)"],
+["Raise Heat Level","LDRDUDU","Lose a 3-star wanted level 25 times"],
+["Raise Wanted Level","LDRDURU","Lose a 3-star wanted level 50 times"],
+["Unlimited Focus","DUUDUDUDUR","Finish the story"],
+["Body Armor","DULUUUUUDD","Complete 100 workouts"],
+["Max Ammo","DURDLLUUDL","25 bronze+ shooting range medals"],
+["Infinite Ammo","DURDLLUDDD","25 silver+ shooting range medals"],
+["No Reload","DURDLLUDDU","25 gold shooting range medals"],
+["Attack Force","DULLRDDUD","Finish the story"],
+["Exploding Balls","DULLRDDUR","Hit 20 enemies with explosives"],
+["Vehicle Force","DULLRDLUD","25 kills with a vehicle"],
+["Maibatsu Boomazoom","LURDLLUL","5 shopping challenges"],
+["MTL Pumper (fire truck)","LURDLRRU","Discover it in the Progress menu"],
+["HVY Bulldozer","LURDLRRD","Discover it in the Progress menu"],
+["Cycle Weather","DRUDRUR","Finish the story (one site says: reveal the whole map)"],
+["Cataclysm filter","DDURRULLRR","Discover Martha's Vamos in the Progress menu"],
+["Dollhouse filter","DDURRULLDR","Spend 8 hours with your partner"],
+["Faded Glory filter","DDURRULLLR","Rob 50 stores with your partner"],
+["No Fall Damage","","Survive a 40-ft fall 20 times"],
+["Parachute","","50 skydives/BASE jumps from 300+ ft"],
+["Repair Vehicle","","Finish 1st in 10 races"],
+["Unlimited Nitrous","","Complete 50 stunt jumps"],
+["All Explosive Weapons","","Throw 100 grenades"],
+["Incendiary Ammo","","Burn 100 enemies"],
+["Exploding Bottles","","Throw 100 Molotovs"],
+["Explosive Shotgun","","Hit 100 enemies with explosives"],
+["Hauners H-AT","","Destroy 100 vehicles"],
+["Speeder 700 GT","","5 combat challenges"],
+["Bravado Banshee","","All combat challenges"],
+["Maibatsu Sanchez","","5 criminal challenges"],
+["Western Zombie Bobber","","All criminal challenges"],
+["Nagasaki Sea Sparrow","","5 exploration challenges"],
+["Nagasaki Carbon RS","","All exploration challenges"],
+["Tuff BMX","","5 fitness challenges"],
+["'65 Vapid Dominator","","All fitness challenges"],
+["Truffade Thrax","","All shopping challenges"],
+["Vapid Stanier G2 Taxi","","5 sports challenges"],
+["Brimstone Golfer","","All sports challenges"],
+["Airboat 09","","5 survival challenges"],
+["Hauners Rhino Tank","","All survival challenges"],
+["Lapwing Mallard","","5 vehicle challenges"],
+["Progen Emerus","","All vehicle challenges"],
+["Hauners P-996 Lazer","","Complete all challenges"],
+["Interstate Ambulance","","Discover it in the Progress menu"],
+["Inflatable Flamingo","","Destroy 50 cocaine flamingos"],
+["Move Time Forward","","Find 10 collectible watches"],
+["Pause Time of Day","","Find 20 collectible watches"],
+["Golden Hour filter","","4 hours holding hands with your partner"],
+["Powdered Sugar filter","","Scan all space debris with WAiNK"],
+["Pinhole filter","","25 gang operations with your partner"],
+["Neon Jungle filter","","Discover all 16 Girlypop vehicles"],
+["Yesteryear filter","","Discover the Ridgeway"],
+["Videotape filter","","50 activities with your partner"],
+["Dark Mirror filter","","$500,000 from vehicle sales"],
+["Migraine filter","","6 minutes at a 6-star wanted level"],
+["Bubblegum filter","","All 24 Vice City Flamingo cards"],
+["Fast Forward filter","","50 meditations"],
+["Fisheye filter","","Catch 100 fish"],
+["Pixel Art filter","","$250,000 from collectible sales"],
+["Hellscape filter","","Steal 100 police vehicles"]
+];
+CHEATS.forEach(([name, code, unlock]) => items.push({type:"cheat", name, code, unlock, steps:[], tips:[]}));
+
+// ---------- Search ----------
+const ARROW = {U:"↑",D:"↓",L:"←",R:"→"};
+const WORD = {U:"up",D:"down",L:"left",R:"right"};
+const TYPES = [["all","All"],["mission","Story missions"],["side","Side & optional"],["cheat","Cheats"],["tip","Tips"]];
+let filter = "all";
+const norm = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[’']/g,"").replace(/[^a-z0-9$]+/g," ").trim();
+items.forEach((it, i) => {
+  it.i = i;
+  it.hName = norm([it.name, it.alt || ""].join(" "));
+  it.hAll = norm([it.name, it.alt, it.who, it.giver, CH[it.ch], it.unlock, it.code ? [...it.code].map(c => WORD[c]).join(" ") : "", ...it.steps, ...it.tips, it.type === "cheat" ? "cheat code" : ""].join(" "));
+});
+
+const chips = document.getElementById("chips");
+TYPES.forEach(([k, label]) => {
+  const b = document.createElement("button");
+  b.className = "chip"; b.type = "button"; b.textContent = label; b.dataset.k = k;
+  b.setAttribute("aria-pressed", k === filter);
+  b.onclick = () => { filter = k; [...chips.children].forEach(c => c.setAttribute("aria-pressed", c.dataset.k === k)); run(); };
+  chips.appendChild(b);
+});
+
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+function hl(text, terms){
+  let out = esc(text);
+  terms.filter(t => t.length > 1).forEach(t => {
+    const re = new RegExp("(" + t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi");
+    out = out.replace(/(^|>)([^<]*)/g, (m, a, b) => a + b.replace(re, "<mark>$1</mark>"));
+  });
+  return out;
+}
+
+function card(it, terms, open){
+  const d = document.createElement("details");
+  d.className = "card"; if (open) d.open = true;
+  const tagCls = {mission:"t-mission",side:"t-side",cheat:"t-cheat",tip:"t-tip"}[it.type];
+  const tagTxt = {mission:"Mission",side:"Side",cheat:"Cheat",tip:"Tips"}[it.type];
+  let sub = "";
+  if (it.type === "mission") sub = [CH[it.ch], it.who, it.giver ? "Given by " + it.giver : ""].filter(Boolean).join(" · ");
+  if (it.type === "side") sub = it.who;
+  if (it.type === "cheat") sub = it.code ? "Unlock: " + it.unlock : "Code not found yet · Unlock: " + it.unlock;
+  let body = "";
+  if (it.type === "cheat") {
+    body += it.code ? `<h4>D-pad code (PS5 & Xbox)</h4><div class="code" aria-label="${[...it.code].map(c => WORD[c]).join(", ")}">${[...it.code].map(c => `<span>${ARROW[c]}</span>`).join("")}</div>` : `<h4>Code</h4><p>No site has confirmed a code for this one yet.</p>`;
+    body += `<h4>How to unlock</h4><ul><li>${hl(it.unlock, terms)}</li><li>All cheats need the main story finished first.</li></ul>`;
+  } else {
+    body += `<h4>${it.type === "tip" ? "Key points" : "How to do it"}</h4>${it.type === "tip" ? "<ul>" : "<ol>"}${it.steps.map(s => `<li>${hl(s, terms)}</li>`).join("")}${it.type === "tip" ? "</ul>" : "</ol>"}`;
+    if (it.tips.length) body += `<h4>Tips</h4><ul class="tips">${it.tips.map(s => `<li>${hl(s, terms)}</li>`).join("")}</ul>`;
+  }
+  d.innerHTML = `<summary><h3>${hl(it.name, terms)}${it.alt ? ` <span class="alt">(${hl(it.alt, terms)})</span>` : ""}</h3><span class="tag ${tagCls}">${tagTxt}</span>${sub ? `<div class="sub">${hl(sub, terms)}</div>` : ""}</summary><div class="body">${body}</div>`;
+  return d;
+}
+
+const list = document.getElementById("list"), meta = document.getElementById("meta"), q = document.getElementById("q");
+function run(){
+  const raw = q.value, terms = norm(raw).split(" ").filter(Boolean);
+  let res = items.filter(it => filter === "all" || it.type === filter);
+  if (terms.length) {
+    res = res.map(it => {
+      if (!terms.every(t => it.hAll.includes(t))) return null;
+      let score = 0;
+      const full = terms.join(" ");
+      if (it.hName === full) score += 100;
+      else if (it.hName.startsWith(full)) score += 60;
+      else if (it.hName.includes(full)) score += 40;
+      score += terms.filter(t => it.hName.includes(t)).length * 10;
+      return {it, score};
+    }).filter(Boolean).sort((a, b) => b.score - a.score || a.it.i - b.it.i).map(x => x.it);
+  }
+  list.innerHTML = "";
+  if (!res.length) { list.innerHTML = `<div class="empty">Nothing matches “${esc(raw)}”. Try part of a mission name, a character (Lucia, Raul), or a word like “money”.</div>`; meta.textContent = "0 results"; return; }
+  const frag = document.createDocumentFragment();
+  res.forEach((it, idx) => frag.appendChild(card(it, terms, terms.length > 0 && idx < 3)));
+  list.appendChild(frag);
+  const counts = {mission:0, side:0, cheat:0, tip:0}; res.forEach(it => counts[it.type]++);
+  meta.textContent = `${res.length} results · ${counts.mission} missions · ${counts.side} side · ${counts.cheat} cheats · ${counts.tip} tip sheets`;
+}
+let tmr; q.addEventListener("input", () => { clearTimeout(tmr); tmr = setTimeout(run, 80); });
+try { const s = localStorage.getItem("leonida.q"); if (s) q.value = s; } catch (e) {}
+q.addEventListener("change", () => { try { localStorage.setItem("leonida.q", q.value); } catch (e) {} });
+run();
+</script>
+</body>
+</html>
